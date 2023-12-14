@@ -28,6 +28,7 @@ vim.o.foldclose = 'all'
 vim.o.foldenable = false
 
 
+lvim.colorscheme = "tokyonight-night"
 lvim.transparent_window = true
 
 -- Plugins
