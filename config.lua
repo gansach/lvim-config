@@ -27,11 +27,6 @@ vim.o.endofline = false
 
 vim.o.relativenumber = true
 
--- Configure folds
-vim.o.foldmethod = "expr"
-vim.o.foldexpr = "nvim_treesitter#foldexpr()"
-
-
 lvim.colorscheme = "tokyonight-night"
 lvim.transparent_window = true
 
@@ -55,7 +50,7 @@ lvim.plugins = {
         event = "BufRead",
         config = function()
             require("numb").setup {
-                show_numbers = true, -- Enable 'number' for the window while peeking
+                show_numbers = true,    -- Enable 'number' for the window while peeking
                 show_cursorline = true, -- Enable 'cursorline' for the window while peeking
             }
         end,
@@ -97,12 +92,12 @@ lvim.plugins = {
         "rmagatti/goto-preview",
         config = function()
             require('goto-preview').setup {
-                width = 120,      -- Width of the floating window
-                height = 25,      -- Height of the floating window
+                width = 120,              -- Width of the floating window
+                height = 25,              -- Height of the floating window
                 default_mappings = false, -- Bind default mappings
-                debug = false,    -- Print debug information
-                opacity = nil,    -- 0-100 opacity level of the floating window where 100 is fully transparent.
-                post_open_hook = nil -- A function taking two arguments, a buffer and a window to be ran as a hook.
+                debug = false,            -- Print debug information
+                opacity = nil,            -- 0-100 opacity level of the floating window where 100 is fully transparent.
+                post_open_hook = nil      -- A function taking two arguments, a buffer and a window to be ran as a hook.
                 -- You can use "default_mappings = true" setup option
                 -- Or explicitly set keybindings
                 -- vim.cmd("nnoremap gpd <cmd>lua require('goto-preview').goto_preview_definition()<CR>")
@@ -118,7 +113,8 @@ lvim.plugins = {
     },
     {
         "folke/trouble.nvim",
-        cmd = "TroubleToggle",
+        cmd = "Trouble",
+        opts = {}
     },
     {
         "kylechui/nvim-surround",
@@ -211,6 +207,30 @@ lvim.plugins = {
             }
         }
     },
+    {
+        "kevinhwang91/nvim-ufo",
+        dependencies = { "kevinhwang91/promise-async" },
+        event = "BufRead",
+        keys = {
+            { "zR", function() require("ufo").openAllFolds() end },
+            { "zM", function() require("ufo").closeAllFolds() end },
+            { "K", function()
+                local winid = require('ufo').peekFoldedLinesUnderCursor()
+                if not winid then
+                    vim.lsp.buf.hover()
+                end
+            end }
+        },
+        config = function()
+            vim.o.foldcolumn = '1'
+            vim.o.foldlevel = 99
+            vim.o.foldlevelstart = 99
+            vim.o.foldenable = true
+            require("ufo").setup({
+                close_fold_kinds = { "imports" },
+            })
+        end,
+    }
 }
 
 -- Restore the last session
@@ -222,12 +242,12 @@ lvim.builtin.which_key.mappings["q"] = {
 -- Trouble
 lvim.builtin.which_key.mappings["t"] = {
     name = "Diagnostics",
-    t = { "<cmd>TroubleToggle<cr>", "trouble" },
-    w = { "<cmd>TroubleToggle workspace_diagnostics<cr>", "workspace" },
-    d = { "<cmd>TroubleToggle document_diagnostics<cr>", "document" },
-    q = { "<cmd>TroubleToggle quickfix<cr>", "quickfix" },
-    l = { "<cmd>TroubleToggle loclist<cr>", "loclist" },
-    r = { "<cmd>TroubleToggle lsp_references<cr>", "references" },
+    t = { "<cmd>Trouble diagnostics toggle focus=true filter.buf=0<cr>", "Trouble" },
+    d = { "<cmd>Trouble diagnostics toggle focus=true<cr>", "Workspace" },
+    q = { "<cmd>Trouble qflist toggle<cr>", "Quickfix" },
+    l = { "<cmd>Trouble loclist toggle<cr>", "Loclist" },
+    r = { "<cmd>Trouble lsp toggle focus=false win.position=right<cr>", "References" },
+    s = { "<cmd>Trouble symbols toggle focus=false<cr>", "Symbols" }
 }
 
 table.insert(lvim.builtin.which_key.mappings["s"], {
