@@ -255,6 +255,12 @@ table.insert(lvim.builtin.which_key.mappings["s"], {
     s = { "<cmd>SymbolsOutline<CR>", "Symbols Outline" }
 })
 
+-- Splits and Diffs
+lvim.builtin.which_key.mappings["b"]["v"] = {"<cmd>vsplit<cr>", "Vertical Split"}
+lvim.builtin.which_key.mappings["b"]["V"] = {"<cmd>only<cr>", "Turn off vertical Split"}
+lvim.builtin.which_key.mappings["b"]["d"] = {"<cmd>windo diffthis<cr>", "Diff"}
+lvim.builtin.which_key.mappings["b"]["D"] = {"<cmd>windo diffoff<cr>", "Diff off"}
+
 
 lvim.builtin.which_key.mappings["m"] = {
     name = "Marks",
